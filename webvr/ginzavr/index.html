@@ -1,0 +1,74 @@
+<html>
+<head>
+<title>Ginza VR Tour</title>
+<script src="../js/aframe-master.min.js"></script>
+</head>
+<body>
+<a-scene>
+
+<a-cone id="person" position="-0.9 -2.0 0.3" radius-bottom="0.17" height="0.6" color="blue"></a-cone>
+<a-circle id="marker1" class="marker" target="place1" position="-0.9 -2.4 0.3" rotation="-90 0 0" radius="0.2" color="green"></a-circle>
+<a-circle id="marker2" class="marker" target="place2" position="-1.3 -2.4 -1.2" rotation="-90 0 0" radius="0.2" color="green"></a-circle>
+<a-circle id="marker3" class="marker" target="place3" position="0.0 -2.4 -1.2" rotation="-90 0 0" radius="0.2" color="green"></a-circle>
+<a-circle id="marker4" class="marker" target="place4" position="1.4 -2.4 -0.4" rotation="-90 0 0" radius="0.2" color="green"></a-circle>
+<a-circle id="marker5" class="marker" target="place5" position="0.3 -2.4 1.0" rotation="-90 0 0" radius="0.2" color="green"></a-circle>
+<a-circle id="marker6" class="marker" target="place6" position="1.4 -2.4 1.1" rotation="-90 0 0" radius="0.2" color="green"></a-circle>
+<a-plane id="map" position="0 -2.5 0" rotation="-90 180 180" width="5" height="5" src="pamphlet-map.png"></a-plane>
+
+<a-sky id="place1" src="R0011046_20180707115342_4096.jpg" rotation="0 -110 0"></a-sky>
+<a-sky id="place2" src="R0011047_20180707124249_4096.jpg" rotation="0 140 0" material="transparent:true; opacity:0")></a-sky>
+<a-sky id="place3" src="R0011048_20180707124423_4096.jpg" rotation="0 132 0" material="transparent:true; opacity:0")></a-sky>
+<a-sky id="place4" src="R0011049_20180707124503_4096.jpg" rotation="0 0 0" material="transparent:true; opacity:0")></a-sky>
+<a-sky id="place5" src="R0011050_20180707124625_4096.jpg" rotation="0 89 0" material="transparent:true; opacity:0")></a-sky>
+<a-sky id="place6" src="R0011051_20180707124710_4096.jpg" rotation="0 115 0" material="transparent:true; opacity:0")></a-sky>
+
+<a-entity id="camera" camera position="0 0 0" look-controls cursor="rayOrigin: mouse"></a-entity>
+<a-entity laser-controls raycaster="objects:.marker; far: 30"></a-entity>
+<a-entity oculus-go-controls></a-entity>
+<a-entity gearvr-controls></a-entity>
+<a-entity daydream-controls></a-entity>
+<a-entity oculus-touch-controls="hand: right"></a-entity>
+<a-entity vive-controls="hand: right"></a-entity>
+<a-entity windows-motion-controls="hand: right"></a-entity>
+
+</a-scene>
+</body>
+
+<script>
+var current = "place1";
+const run = function () {
+	let markers = document.querySelectorAll('.marker');
+	let person = document.querySelector('#person');
+	for (let mk of markers) {
+		let target = mk.getAttribute("target");
+		mk.addEventListener('click', function (evt) {
+			if (target==current) return;
+			fade(document.querySelector("#" + current), document.querySelector("#" + target));
+			current = target;
+			person.object3D.position.x = mk.object3D.position.x;
+			person.object3D.position.z = mk.object3D.position.z;
+		});
+	}
+}
+const fade = function(fout, fin) {
+	fout.setAttribute("radius", 4000);
+	fin.setAttribute("radius", 5000);
+	fin.setAttribute("material", {transparent:false, opacity:1});
+	var count = 10;
+	const anim = function(){
+		count -= 1;
+		fout.setAttribute("material", {transparent:true, opacity:count/10});
+		if (count<=0) clearInterval(timer);
+	}
+	const timer = setInterval(anim, 150);
+}
+
+const scene = document.querySelector('a-scene');
+if (scene.hasLoaded) {
+	run();
+} else {
+	scene.addEventListener('loaded', run);
+}
+
+</script>
+</html>
