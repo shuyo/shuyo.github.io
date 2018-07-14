@@ -23,7 +23,8 @@
 <a-sky id="place6" src="R0011051_20180707124710_4096.jpg" rotation="0 115 0" material="transparent:true; opacity:0")></a-sky>
 
 <a-entity id="camera" camera position="0 0 0" look-controls cursor="rayOrigin: mouse"></a-entity>
-<a-entity laser-controls raycaster="objects:.marker; far: 30"></a-entity>
+<a-entity laser-controls="hand:left" raycaster="objects:.marker; far: 30"></a-entity>
+<a-entity laser-controls="hand:right" raycaster="objects:.marker; far: 30"></a-entity>
 <a-entity oculus-go-controls></a-entity>
 <a-entity gearvr-controls></a-entity>
 <a-entity daydream-controls></a-entity>
